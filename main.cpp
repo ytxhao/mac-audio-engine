@@ -8,6 +8,8 @@ int main() {
     auto *audioDeviceMac = new webrtc::AudioDeviceMac();
     audioDeviceMac->Init();
 
+
+    delete audioDeviceMac;
     NSLog(@"main out");
     return 0;
 }

@@ -20,7 +20,7 @@
 #include "rtc_base/checks.h"
 #include "rtc_base/logging.h"
 #include "rtc_base/time_utils.h"
-#include "system_wrappers/include/metrics.h"
+//#include "system_wrappers/include/metrics.h"
 
 namespace webrtc {
 
@@ -169,7 +169,7 @@ void AudioDeviceBuffer::StopRecording() {
   const size_t time_since_start = rtc::TimeSince(rec_start_time_);
   if (time_since_start > kMinValidCallTimeTimeInMilliseconds) {
     const int only_zeros = static_cast<int>(only_silence_recorded_);
-    RTC_HISTOGRAM_BOOLEAN("WebRTC.Audio.RecordedOnlyZeros", only_zeros);
+//    RTC_HISTOGRAM_BOOLEAN("WebRTC.Audio.RecordedOnlyZeros", only_zeros);
     RTC_LOG(INFO) << "HISTOGRAM(WebRTC.Audio.RecordedOnlyZeros): "
                   << only_zeros;
   }
@@ -243,14 +243,14 @@ int32_t AudioDeviceBuffer::SetRecordedBuffer(const void* audio_buffer,
   RTC_DCHECK_LT(rec_stat_count_, 50);
   if (++rec_stat_count_ >= 50) {
     // Returns the largest absolute value in a signed 16-bit vector.
-    max_abs = WebRtcSpl_MaxAbsValueW16(rec_buffer_.data(), rec_buffer_.size());
-    rec_stat_count_ = 0;
-    // Set `only_silence_recorded_` to false as soon as at least one detection
-    // of a non-zero audio packet is found. It can only be restored to true
-    // again by restarting the call.
-    if (max_abs > 0) {
-      only_silence_recorded_ = false;
-    }
+//    max_abs = WebRtcSpl_MaxAbsValueW16(rec_buffer_.data(), rec_buffer_.size());
+//    rec_stat_count_ = 0;
+//    // Set `only_silence_recorded_` to false as soon as at least one detection
+//    // of a non-zero audio packet is found. It can only be restored to true
+//    // again by restarting the call.
+//    if (max_abs > 0) {
+//      only_silence_recorded_ = false;
+//    }
   }
   // Update recording stats which is used as base for periodic logging of the
   // audio input state.
@@ -311,9 +311,9 @@ int32_t AudioDeviceBuffer::RequestPlayoutData(size_t samples_per_channel) {
   RTC_DCHECK_LT(play_stat_count_, 50);
   if (++play_stat_count_ >= 50) {
     // Returns the largest absolute value in a signed 16-bit vector.
-    max_abs =
-        WebRtcSpl_MaxAbsValueW16(play_buffer_.data(), play_buffer_.size());
-    play_stat_count_ = 0;
+//    max_abs =
+//        WebRtcSpl_MaxAbsValueW16(play_buffer_.data(), play_buffer_.size());
+//    play_stat_count_ = 0;
   }
   // Update playout stats which is used as base for periodic logging of the
   // audio output state.
@@ -406,8 +406,8 @@ void AudioDeviceBuffer::LogStats(LogState state) {
       abs_diff_rate_in_percent = static_cast<uint32_t>(
           0.5f +
           ((100.0f * std::abs(rate - rec_sample_rate)) / rec_sample_rate));
-      RTC_HISTOGRAM_PERCENTAGE("WebRTC.Audio.RecordSampleRateOffsetInPercent",
-                               abs_diff_rate_in_percent);
+//      RTC_HISTOGRAM_PERCENTAGE("WebRTC.Audio.RecordSampleRateOffsetInPercent",
+//                               abs_diff_rate_in_percent);
       RTC_LOG(INFO) << "[REC : " << time_since_last << "msec, "
                     << rec_sample_rate / 1000 << "kHz] callbacks: "
                     << stats.rec_callbacks - last_stats_.rec_callbacks
@@ -432,8 +432,8 @@ void AudioDeviceBuffer::LogStats(LogState state) {
       abs_diff_rate_in_percent = static_cast<uint32_t>(
           0.5f +
           ((100.0f * std::abs(rate - play_sample_rate)) / play_sample_rate));
-      RTC_HISTOGRAM_PERCENTAGE("WebRTC.Audio.PlayoutSampleRateOffsetInPercent",
-                               abs_diff_rate_in_percent);
+//      RTC_HISTOGRAM_PERCENTAGE("WebRTC.Audio.PlayoutSampleRateOffsetInPercent",
+//                               abs_diff_rate_in_percent);
       RTC_LOG(INFO) << "[PLAY: " << time_since_last << "msec, "
                     << play_sample_rate / 1000 << "kHz] callbacks: "
                     << stats.play_callbacks - last_stats_.play_callbacks

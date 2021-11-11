@@ -18,7 +18,7 @@
 #include <memory>
 
 #include "modules/audio_device/audio_device_generic.h"
-//#include "modules/audio_device/mac/audio_mixer_manager_mac.h"
+#include "modules/audio_device/mac/audio_mixer_manager_mac.h"
 #include "rtc_base/event.h"
 #include "rtc_base/logging.h"
 #include "rtc_base/platform_thread.h"
@@ -149,8 +149,8 @@ class AudioDeviceMac : public AudioDeviceGeneric {
   // Delay information and control
   virtual int32_t PlayoutDelay(uint16_t& delayMS) const;
 
-//  virtual void AttachAudioBuffer(AudioDeviceBuffer* audioBuffer)
-//      RTC_LOCKS_EXCLUDED(mutex_);
+  virtual void AttachAudioBuffer(AudioDeviceBuffer* audioBuffer)
+      RTC_LOCKS_EXCLUDED(mutex_);
 
  private:
   int32_t InitSpeakerLocked() RTC_EXCLUSIVE_LOCKS_REQUIRED(mutex_);
@@ -261,7 +261,7 @@ class AudioDeviceMac : public AudioDeviceGeneric {
 
   bool KeyPressed();
 
-//  AudioDeviceBuffer* _ptrAudioBuffer;
+  AudioDeviceBuffer* _ptrAudioBuffer;
 
   Mutex mutex_;
 
@@ -274,7 +274,7 @@ class AudioDeviceMac : public AudioDeviceGeneric {
   // Only valid/running between calls to StartPlayout and StopPlayout.
   rtc::PlatformThread render_worker_thread_;
 
-//  AudioMixerManagerMac _mixerManager;
+  AudioMixerManagerMac _mixerManager;
 
   uint16_t _inputDeviceIndex;
   uint16_t _outputDeviceIndex;

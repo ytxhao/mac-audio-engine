@@ -13,7 +13,7 @@
 
 #include <stdint.h>
 
-//#include "modules/audio_device/audio_device_buffer.h"
+#include "modules/audio_device/audio_device_buffer.h"
 //#include "modules/audio_device/include/audio_device.h"
 #include "modules/audio_device/include/audio_device_defines.h"
 
@@ -135,7 +135,7 @@ class AudioDeviceGeneric {
   virtual int GetRecordAudioParameters(AudioParameters* params) const;
 #endif  // WEBRTC_IOS
 
-//  virtual void AttachAudioBuffer(AudioDeviceBuffer* audioBuffer) = 0;
+  virtual void AttachAudioBuffer(AudioDeviceBuffer* audioBuffer) = 0;
 
   virtual ~AudioDeviceGeneric() {}
 };

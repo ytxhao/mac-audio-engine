@@ -204,17 +204,17 @@ AudioDeviceMac::~AudioDeviceMac() {
 //                                     API
 // ============================================================================
 
-//void AudioDeviceMac::AttachAudioBuffer(AudioDeviceBuffer* audioBuffer) {
-//  MutexLock lock(&mutex_);
-//
-//  _ptrAudioBuffer = audioBuffer;
-//
-//  // inform the AudioBuffer about default settings for this implementation
-//  _ptrAudioBuffer->SetRecordingSampleRate(N_REC_SAMPLES_PER_SEC);
-//  _ptrAudioBuffer->SetPlayoutSampleRate(N_PLAY_SAMPLES_PER_SEC);
-//  _ptrAudioBuffer->SetRecordingChannels(N_REC_CHANNELS);
-//  _ptrAudioBuffer->SetPlayoutChannels(N_PLAY_CHANNELS);
-//}
+void AudioDeviceMac::AttachAudioBuffer(AudioDeviceBuffer* audioBuffer) {
+  MutexLock lock(&mutex_);
+
+  _ptrAudioBuffer = audioBuffer;
+
+  // inform the AudioBuffer about default settings for this implementation
+  _ptrAudioBuffer->SetRecordingSampleRate(N_REC_SAMPLES_PER_SEC);
+  _ptrAudioBuffer->SetPlayoutSampleRate(N_PLAY_SAMPLES_PER_SEC);
+  _ptrAudioBuffer->SetRecordingChannels(N_REC_CHANNELS);
+  _ptrAudioBuffer->SetPlayoutChannels(N_PLAY_CHANNELS);
+}
 
 //int32_t AudioDeviceMac::ActiveAudioLayer(
 //    AudioDeviceModule::AudioLayer& audioLayer) const {
@@ -350,7 +350,7 @@ int32_t AudioDeviceMac::Terminate() {
   }
 
   MutexLock lock(&mutex_);
-//  _mixerManager.Close();
+  _mixerManager.Close();
 
   OSStatus err = noErr;
   int retVal = 0;
@@ -387,7 +387,7 @@ int32_t AudioDeviceMac::SpeakerIsAvailable(bool& available) {
 
 int32_t AudioDeviceMac::SpeakerIsAvailableLocked(bool& available) {
     bool wasInitialized = false;
-//   wasInitialized = _mixerManager.SpeakerIsInitialized();
+   wasInitialized = _mixerManager.SpeakerIsInitialized();
 
   // Make an attempt to open up the
   // output mixer corresponding to the currently selected output device.
@@ -404,7 +404,7 @@ int32_t AudioDeviceMac::SpeakerIsAvailableLocked(bool& available) {
   // Close the initialized output mixer
   //
   if (!wasInitialized) {
-//    _mixerManager.CloseSpeaker();
+    _mixerManager.CloseSpeaker();
   }
 
   return 0;
@@ -430,9 +430,9 @@ int32_t AudioDeviceMac::InitSpeakerLocked() {
     _twoDevices = true;
   }
 
-//  if (_mixerManager.OpenSpeaker(_outputDeviceID) == -1) {
-//    return -1;
-//  }
+  if (_mixerManager.OpenSpeaker(_outputDeviceID) == -1) {
+    return -1;
+  }
 
   return 0;
 }
@@ -444,7 +444,7 @@ int32_t AudioDeviceMac::MicrophoneIsAvailable(bool& available) {
 
 int32_t AudioDeviceMac::MicrophoneIsAvailableLocked(bool& available) {
   bool wasInitialized = false ;
-//    wasInitialized = _mixerManager.MicrophoneIsInitialized();
+  wasInitialized = _mixerManager.MicrophoneIsInitialized();
 
   // Make an attempt to open up the
   // input mixer corresponding to the currently selected output device.
@@ -461,7 +461,7 @@ int32_t AudioDeviceMac::MicrophoneIsAvailableLocked(bool& available) {
   // Close the initialized input mixer
   //
   if (!wasInitialized) {
-//    _mixerManager.CloseMicrophone();
+    _mixerManager.CloseMicrophone();
   }
 
   return 0;
@@ -487,26 +487,24 @@ int32_t AudioDeviceMac::InitMicrophoneLocked() {
     _twoDevices = true;
   }
 
-//  if (_mixerManager.OpenMicrophone(_inputDeviceID) == -1) {
-//    return -1;
-//  }
+  if (_mixerManager.OpenMicrophone(_inputDeviceID) == -1) {
+    return -1;
+  }
 
   return 0;
 }
 
 bool AudioDeviceMac::SpeakerIsInitialized() const {
-//  return (_mixerManager.SpeakerIsInitialized());
-return false;
+  return (_mixerManager.SpeakerIsInitialized());
 }
 
 bool AudioDeviceMac::MicrophoneIsInitialized() const {
-//  return (_mixerManager.MicrophoneIsInitialized());
-    return false;
+  return (_mixerManager.MicrophoneIsInitialized());
 }
 
 int32_t AudioDeviceMac::SpeakerVolumeIsAvailable(bool& available) {
   bool wasInitialized = false;
-//    wasInitialized = _mixerManager.SpeakerIsInitialized();
+  wasInitialized = _mixerManager.SpeakerIsInitialized();
 
   // Make an attempt to open up the
   // output mixer corresponding to the currently selected output device.
@@ -525,23 +523,22 @@ int32_t AudioDeviceMac::SpeakerVolumeIsAvailable(bool& available) {
   // Close the initialized output mixer
   //
   if (!wasInitialized) {
-//    _mixerManager.CloseSpeaker();
+    _mixerManager.CloseSpeaker();
   }
 
   return 0;
 }
 
 int32_t AudioDeviceMac::SetSpeakerVolume(uint32_t volume) {
-//  return (_mixerManager.SetSpeakerVolume(volume));
-return false;
+  return (_mixerManager.SetSpeakerVolume(volume));
 }
 
 int32_t AudioDeviceMac::SpeakerVolume(uint32_t& volume) const {
   uint32_t level(0);
 
-//  if (_mixerManager.SpeakerVolume(level) == -1) {
-//    return -1;
-//  }
+  if (_mixerManager.SpeakerVolume(level) == -1) {
+    return -1;
+  }
 
   volume = level;
   return 0;
@@ -550,9 +547,9 @@ int32_t AudioDeviceMac::SpeakerVolume(uint32_t& volume) const {
 int32_t AudioDeviceMac::MaxSpeakerVolume(uint32_t& maxVolume) const {
   uint32_t maxVol(0);
 
-//  if (_mixerManager.MaxSpeakerVolume(maxVol) == -1) {
-//    return -1;
-//  }
+  if (_mixerManager.MaxSpeakerVolume(maxVol) == -1) {
+    return -1;
+  }
 
   maxVolume = maxVol;
   return 0;
@@ -561,9 +558,9 @@ int32_t AudioDeviceMac::MaxSpeakerVolume(uint32_t& maxVolume) const {
 int32_t AudioDeviceMac::MinSpeakerVolume(uint32_t& minVolume) const {
   uint32_t minVol(0);
 
-//  if (_mixerManager.MinSpeakerVolume(minVol) == -1) {
-//    return -1;
-//  }
+  if (_mixerManager.MinSpeakerVolume(minVol) == -1) {
+    return -1;
+  }
 
   minVolume = minVol;
   return 0;
@@ -572,7 +569,7 @@ int32_t AudioDeviceMac::MinSpeakerVolume(uint32_t& minVolume) const {
 int32_t AudioDeviceMac::SpeakerMuteIsAvailable(bool& available) {
   bool isAvailable(false);
   bool wasInitialized = false;
-//    wasInitialized = _mixerManager.SpeakerIsInitialized();
+  wasInitialized = _mixerManager.SpeakerIsInitialized();
 
   // Make an attempt to open up the
   // output mixer corresponding to the currently selected output device.
@@ -587,30 +584,29 @@ int32_t AudioDeviceMac::SpeakerMuteIsAvailable(bool& available) {
 
   // Check if the selected speaker has a mute control
   //
-//  _mixerManager.SpeakerMuteIsAvailable(isAvailable);
+  _mixerManager.SpeakerMuteIsAvailable(isAvailable);
 
   available = isAvailable;
 
   // Close the initialized output mixer
   //
   if (!wasInitialized) {
-//    _mixerManager.CloseSpeaker();
+    _mixerManager.CloseSpeaker();
   }
 
   return 0;
 }
 
 int32_t AudioDeviceMac::SetSpeakerMute(bool enable) {
-//  return (_mixerManager.SetSpeakerMute(enable));
-return false;
+  return (_mixerManager.SetSpeakerMute(enable));
 }
 
 int32_t AudioDeviceMac::SpeakerMute(bool& enabled) const {
   bool muted(0);
 
-//  if (_mixerManager.SpeakerMute(muted) == -1) {
-//    return -1;
-//  }
+  if (_mixerManager.SpeakerMute(muted) == -1) {
+    return -1;
+  }
 
   enabled = muted;
   return 0;
@@ -619,7 +615,7 @@ int32_t AudioDeviceMac::SpeakerMute(bool& enabled) const {
 int32_t AudioDeviceMac::MicrophoneMuteIsAvailable(bool& available) {
   bool isAvailable(false);
   bool wasInitialized = false;
-//    wasInitialized = _mixerManager.MicrophoneIsInitialized();
+  wasInitialized = _mixerManager.MicrophoneIsInitialized();
 
   // Make an attempt to open up the
   // input mixer corresponding to the currently selected input device.
@@ -634,29 +630,28 @@ int32_t AudioDeviceMac::MicrophoneMuteIsAvailable(bool& available) {
 
   // Check if the selected microphone has a mute control
   //
-//  _mixerManager.MicrophoneMuteIsAvailable(isAvailable);
+  _mixerManager.MicrophoneMuteIsAvailable(isAvailable);
   available = isAvailable;
 
   // Close the initialized input mixer
   //
   if (!wasInitialized) {
-//    _mixerManager.CloseMicrophone();
+    _mixerManager.CloseMicrophone();
   }
 
   return 0;
 }
 
 int32_t AudioDeviceMac::SetMicrophoneMute(bool enable) {
-//  return (_mixerManager.SetMicrophoneMute(enable));
-    return false;
+  return (_mixerManager.SetMicrophoneMute(enable));
 }
 
 int32_t AudioDeviceMac::MicrophoneMute(bool& enabled) const {
   bool muted(0);
 
-//  if (_mixerManager.MicrophoneMute(muted) == -1) {
-//    return -1;
-//  }
+  if (_mixerManager.MicrophoneMute(muted) == -1) {
+    return -1;
+  }
 
   enabled = muted;
   return 0;
@@ -665,7 +660,7 @@ int32_t AudioDeviceMac::MicrophoneMute(bool& enabled) const {
 int32_t AudioDeviceMac::StereoRecordingIsAvailable(bool& available) {
   bool isAvailable(false);
   bool wasInitialized = false ;
-//    wasInitialized =_mixerManager.MicrophoneIsInitialized();
+  wasInitialized =_mixerManager.MicrophoneIsInitialized();
 
   if (!wasInitialized && InitMicrophone() == -1) {
     // Cannot open the specified device
@@ -675,13 +670,13 @@ int32_t AudioDeviceMac::StereoRecordingIsAvailable(bool& available) {
 
   // Check if the selected microphone can record stereo
   //
-//  _mixerManager.StereoRecordingIsAvailable(isAvailable);
+  _mixerManager.StereoRecordingIsAvailable(isAvailable);
   available = isAvailable;
 
   // Close the initialized input mixer
   //
   if (!wasInitialized) {
-//    _mixerManager.CloseMicrophone();
+    _mixerManager.CloseMicrophone();
   }
 
   return 0;
@@ -708,7 +703,7 @@ int32_t AudioDeviceMac::StereoRecording(bool& enabled) const {
 int32_t AudioDeviceMac::StereoPlayoutIsAvailable(bool& available) {
   bool isAvailable(false);
   bool wasInitialized = false;
-//    wasInitialized = _mixerManager.SpeakerIsInitialized();
+  wasInitialized = _mixerManager.SpeakerIsInitialized();
 
   if (!wasInitialized && InitSpeaker() == -1) {
     // Cannot open the specified device
@@ -718,13 +713,13 @@ int32_t AudioDeviceMac::StereoPlayoutIsAvailable(bool& available) {
 
   // Check if the selected microphone can record stereo
   //
-//  _mixerManager.StereoPlayoutIsAvailable(isAvailable);
+  _mixerManager.StereoPlayoutIsAvailable(isAvailable);
   available = isAvailable;
 
   // Close the initialized input mixer
   //
   if (!wasInitialized) {
-//    _mixerManager.CloseSpeaker();
+    _mixerManager.CloseSpeaker();
   }
 
   return 0;
@@ -750,7 +745,7 @@ int32_t AudioDeviceMac::StereoPlayout(bool& enabled) const {
 
 int32_t AudioDeviceMac::MicrophoneVolumeIsAvailable(bool& available) {
   bool wasInitialized = false;
-//    wasInitialized = _mixerManager.MicrophoneIsInitialized();
+  wasInitialized = _mixerManager.MicrophoneIsInitialized();
 
   // Make an attempt to open up the
   // input mixer corresponding to the currently selected output device.
@@ -770,24 +765,23 @@ int32_t AudioDeviceMac::MicrophoneVolumeIsAvailable(bool& available) {
   // Close the initialized input mixer
   //
   if (!wasInitialized) {
-//    _mixerManager.CloseMicrophone();
+    _mixerManager.CloseMicrophone();
   }
 
   return 0;
 }
 
 int32_t AudioDeviceMac::SetMicrophoneVolume(uint32_t volume) {
-//  return (_mixerManager.SetMicrophoneVolume(volume));
-return 1;
+  return (_mixerManager.SetMicrophoneVolume(volume));
 }
 
 int32_t AudioDeviceMac::MicrophoneVolume(uint32_t& volume) const {
   uint32_t level(0);
 
-//  if (_mixerManager.MicrophoneVolume(level) == -1) {
-//    RTC_LOG(LS_WARNING) << "failed to retrieve current microphone level";
-//    return -1;
-//  }
+  if (_mixerManager.MicrophoneVolume(level) == -1) {
+    RTC_LOG(LS_WARNING) << "failed to retrieve current microphone level";
+    return -1;
+  }
 
   volume = level;
   return 0;
@@ -796,9 +790,9 @@ int32_t AudioDeviceMac::MicrophoneVolume(uint32_t& volume) const {
 int32_t AudioDeviceMac::MaxMicrophoneVolume(uint32_t& maxVolume) const {
   uint32_t maxVol(0);
 
-//  if (_mixerManager.MaxMicrophoneVolume(maxVol) == -1) {
-//    return -1;
-//  }
+  if (_mixerManager.MaxMicrophoneVolume(maxVol) == -1) {
+    return -1;
+  }
 
   maxVolume = maxVol;
   return 0;
@@ -807,9 +801,9 @@ int32_t AudioDeviceMac::MaxMicrophoneVolume(uint32_t& maxVolume) const {
 int32_t AudioDeviceMac::MinMicrophoneVolume(uint32_t& minVolume) const {
   uint32_t minVol(0);
 
-//  if (_mixerManager.MinMicrophoneVolume(minVol) == -1) {
-//    return -1;
-//  }
+  if (_mixerManager.MinMicrophoneVolume(minVol) == -1) {
+    return -1;
+  }
 
   minVolume = minVol;
   return 0;
@@ -1968,7 +1962,7 @@ int32_t AudioDeviceMac::HandleDeviceChange() {
     if (err == kAudioHardwareBadDeviceError || deviceIsAlive == 0) {
       RTC_LOG(LS_WARNING) << "Capture device is not alive (probably removed)";
       AtomicSet32(&_captureDeviceIsAlive, 0);
-//      _mixerManager.CloseMicrophone();
+      _mixerManager.CloseMicrophone();
     } else if (err != noErr) {
       logCAMsg(rtc::LS_ERROR, "Error in AudioDeviceGetProperty()",
                (const char*)&err);
@@ -1987,7 +1981,7 @@ int32_t AudioDeviceMac::HandleDeviceChange() {
     if (err == kAudioHardwareBadDeviceError || deviceIsAlive == 0) {
       RTC_LOG(LS_WARNING) << "Render device is not alive (probably removed)";
       AtomicSet32(&_renderDeviceIsAlive, 0);
-//      _mixerManager.CloseSpeaker();
+      _mixerManager.CloseSpeaker();
     } else if (err != noErr) {
       logCAMsg(rtc::LS_ERROR, "Error in AudioDeviceGetProperty()",
                (const char*)&err);
@@ -2411,17 +2405,17 @@ bool AudioDeviceMac::RenderWorkerThread() {
 
   int8_t playBuffer[4 * ENGINE_PLAY_BUF_SIZE_IN_SAMPLES];
 
-//  if (!_ptrAudioBuffer) {
-//    RTC_LOG(LS_ERROR) << "capture AudioBuffer is invalid";
-//    return false;
-//  }
+  if (!_ptrAudioBuffer) {
+    RTC_LOG(LS_ERROR) << "capture AudioBuffer is invalid";
+    return false;
+  }
 
   // Ask for new PCM data to be played out using the AudioDeviceBuffer.
   uint32_t nSamples = 0;
 
-//    nSamples = _ptrAudioBuffer->RequestPlayoutData(ENGINE_PLAY_BUF_SIZE_IN_SAMPLES);
+  nSamples = _ptrAudioBuffer->RequestPlayoutData(ENGINE_PLAY_BUF_SIZE_IN_SAMPLES);
 //
-//  nSamples = _ptrAudioBuffer->GetPlayoutData(playBuffer);
+  nSamples = _ptrAudioBuffer->GetPlayoutData(playBuffer);
   if (nSamples != ENGINE_PLAY_BUF_SIZE_IN_SAMPLES) {
     RTC_LOG(LS_ERROR) << "invalid number of output samples(" << nSamples << ")";
   }
