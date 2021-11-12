@@ -897,7 +897,7 @@ int32_t AudioDeviceMac::SetRecordingDevice(uint16_t index) {
   AudioDeviceID recDevices[MaxNumberDevices];
   uint32_t nDevices = GetNumberDevices(kAudioDevicePropertyScopeInput,
                                        recDevices, MaxNumberDevices);
-  RTC_LOG(LS_VERBOSE) << "number of available waveform-audio input devices is "
+  RTC_LOG(LS_INFO) << "number of available waveform-audio input devices is "
                       << nDevices;
 
   if (index > (nDevices - 1)) {
@@ -1197,11 +1197,11 @@ int32_t AudioDeviceMac::InitRecording() {
     RTC_LOG(LS_VERBOSE) << "Stereo recording unavailable on this device";
   }
 
-//  if (_ptrAudioBuffer) {
-//    // Update audio buffer with the selected parameters
-//    _ptrAudioBuffer->SetRecordingSampleRate(N_REC_SAMPLES_PER_SEC);
-//    _ptrAudioBuffer->SetRecordingChannels((uint8_t)_recChannels);
-//  }
+  if (_ptrAudioBuffer) {
+    // Update audio buffer with the selected parameters
+    _ptrAudioBuffer->SetRecordingSampleRate(N_REC_SAMPLES_PER_SEC);
+    _ptrAudioBuffer->SetRecordingChannels((uint8_t)_recChannels);
+  }
 
   _inDesiredFormat.mSampleRate = N_REC_SAMPLES_PER_SEC;
   _inDesiredFormat.mBytesPerPacket =
@@ -1818,11 +1818,11 @@ OSStatus AudioDeviceMac::SetDesiredPlayoutFormat() {
   _outDesiredFormat.mSampleRate = N_PLAY_SAMPLES_PER_SEC;
   _outDesiredFormat.mChannelsPerFrame = _playChannels;
 
-//  if (_ptrAudioBuffer) {
-//    // Update audio buffer with the selected parameters.
-//    _ptrAudioBuffer->SetPlayoutSampleRate(N_PLAY_SAMPLES_PER_SEC);
-//    _ptrAudioBuffer->SetPlayoutChannels((uint8_t)_playChannels);
-//  }
+  if (_ptrAudioBuffer) {
+    // Update audio buffer with the selected parameters.
+    _ptrAudioBuffer->SetPlayoutSampleRate(N_PLAY_SAMPLES_PER_SEC);
+    _ptrAudioBuffer->SetPlayoutChannels((uint8_t)_playChannels);
+  }
 
   _renderDelayOffsetSamples =
       _renderBufSizeSamples - N_BUFFERS_OUT * ENGINE_PLAY_BUF_SIZE_IN_SAMPLES *
@@ -2021,12 +2021,12 @@ int32_t AudioDeviceMac::HandleStreamFormatChange(
                       << streamFormat.mChannelsPerFrame << ")";
     return -1;
   }
-//
-//  if (_ptrAudioBuffer && streamFormat.mChannelsPerFrame != _recChannels) {
-//    RTC_LOG(LS_ERROR) << "Changing channels not supported (mChannelsPerFrame = "
-//                      << streamFormat.mChannelsPerFrame << ")";
-//    return -1;
-//  }
+
+  if (_ptrAudioBuffer && streamFormat.mChannelsPerFrame != _recChannels) {
+    RTC_LOG(LS_ERROR) << "Changing channels not supported (mChannelsPerFrame = "
+                      << streamFormat.mChannelsPerFrame << ")";
+    return -1;
+  }
 
   RTC_LOG(LS_VERBOSE) << "Stream format:";
   RTC_LOG(LS_VERBOSE) << "mSampleRate = " << streamFormat.mSampleRate
@@ -2488,20 +2488,20 @@ bool AudioDeviceMac::CaptureWorkerThread() {
     msecOnRecordSide =
         static_cast<int32_t>(1e-3 * (captureDelayUs + _captureLatencyUs) + 0.5);
 
-//    if (!_ptrAudioBuffer) {
-//      RTC_LOG(LS_ERROR) << "capture AudioBuffer is invalid";
-//      return false;
-//    }
+    if (!_ptrAudioBuffer) {
+      RTC_LOG(LS_ERROR) << "capture AudioBuffer is invalid";
+      return false;
+    }
 
     // store the recorded buffer (no action will be taken if the
     // #recorded samples is not a full buffer)
-//    _ptrAudioBuffer->SetRecordedBuffer((int8_t*)&recordBuffer, (uint32_t)size);
-//    _ptrAudioBuffer->SetVQEData(msecOnPlaySide, msecOnRecordSide);
-//    _ptrAudioBuffer->SetTypingStatus(KeyPressed());
+    _ptrAudioBuffer->SetRecordedBuffer((int8_t*)&recordBuffer, (uint32_t)size);
+    _ptrAudioBuffer->SetVQEData(msecOnPlaySide, msecOnRecordSide);
+    _ptrAudioBuffer->SetTypingStatus(KeyPressed());
 
     // deliver recorded samples at specified sample rate, mic level etc.
     // to the observer using callback
-//    _ptrAudioBuffer->DeliverRecordedData();
+    _ptrAudioBuffer->DeliverRecordedData();
   }
 
   return true;

@@ -45,7 +45,7 @@ class AudioTransportCallback : public AudioTransport{
 
      }
 };
-
+#define AUDIO_DEVICE_ID (0u)
 int main() {
     std::cout << "Hello, World!" << std::endl;
     NSLog(@"main in");
@@ -70,6 +70,7 @@ int main() {
 //--------------------
     audio_device_->SetPlayoutDevice(0);
 //--------------------
+    audio_device_->SetRecordingDevice(AUDIO_DEVICE_ID);
     audio_device_->InitSpeaker();
 //--------------------
     {
@@ -155,25 +156,25 @@ int main() {
         RTC_LOG(INFO) << "output: " << isAvailable;
     }
 
-    //----------
-    audio_device_->Playing();
-    //---
-    {
-        if (audio_device_->PlayoutIsInitialized()) {
-            return 0;
-        }
-        int32_t result = audio_device_->InitPlayout();
-        RTC_LOG(INFO) << "output: " << result;
-    }
-    //------------
-    {
-        audio_device_buffer_.StartPlayout();
-#if defined(WEBRTC_ANDROID)
-        audio_device_->SetAudioMode(audio_mode_);
-#endif // WEBRTC_ANDROID
-        int32_t result = audio_device_->StartPlayout();
-        RTC_LOG(INFO) << "output: " << result;
-    }
+//    //----------
+//    audio_device_->Playing();
+//    //---
+//    {
+//        if (audio_device_->PlayoutIsInitialized()) {
+//            return 0;
+//        }
+//        int32_t result = audio_device_->InitPlayout();
+//        RTC_LOG(INFO) << "output: " << result;
+//    }
+//    //------------
+//    {
+//        audio_device_buffer_.StartPlayout();
+//#if defined(WEBRTC_ANDROID)
+//        audio_device_->SetAudioMode(audio_mode_);
+//#endif // WEBRTC_ANDROID
+//        int32_t result = audio_device_->StartPlayout();
+//        RTC_LOG(INFO) << "output: " << result;
+//    }
 
     {
         bool isAvailable = audio_device_->BuiltInAECIsAvailable();
@@ -204,12 +205,12 @@ int main() {
     while (!isCancel)
     {
 
-        std::cout << "1.录制人声" << std::endl;
-        std::cout << "2.录制人声并播放音乐" << std::endl;
-        std::cout << "请输入:";
-        std::getline(std::cin, cmd);
+//        std::cout << "1.录制人声" << std::endl;
+//        std::cout << "2.录制人声并播放音乐" << std::endl;
+//        std::cout << "请输入:";
+//        std::getline(std::cin, cmd);
         if (!std::cin.eof()) {
-            std::cout << "cmd:"<<cmd<<std::endl;
+//            std::cout << "cmd:"<<cmd<<std::endl;
         } else {
             isCancel = true;
         }

@@ -244,13 +244,14 @@ int32_t AudioDeviceBuffer::SetRecordedBuffer(const void* audio_buffer,
   if (++rec_stat_count_ >= 50) {
     // Returns the largest absolute value in a signed 16-bit vector.
 //    max_abs = WebRtcSpl_MaxAbsValueW16(rec_buffer_.data(), rec_buffer_.size());
-//    rec_stat_count_ = 0;
+      max_abs = 60;
+    rec_stat_count_ = 0;
 //    // Set `only_silence_recorded_` to false as soon as at least one detection
 //    // of a non-zero audio packet is found. It can only be restored to true
 //    // again by restarting the call.
-//    if (max_abs > 0) {
-//      only_silence_recorded_ = false;
-//    }
+    if (max_abs > 0) {
+      only_silence_recorded_ = false;
+    }
   }
   // Update recording stats which is used as base for periodic logging of the
   // audio input state.
@@ -313,7 +314,8 @@ int32_t AudioDeviceBuffer::RequestPlayoutData(size_t samples_per_channel) {
     // Returns the largest absolute value in a signed 16-bit vector.
 //    max_abs =
 //        WebRtcSpl_MaxAbsValueW16(play_buffer_.data(), play_buffer_.size());
-//    play_stat_count_ = 0;
+      max_abs = 60;
+    play_stat_count_ = 0;
   }
   // Update playout stats which is used as base for periodic logging of the
   // audio output state.
