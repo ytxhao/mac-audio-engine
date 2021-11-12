@@ -115,7 +115,8 @@ void AudioDeviceMac::logCAMsg(const rtc::LoggingSeverity sev,
 }
 
 AudioDeviceMac::AudioDeviceMac()
-    :
+    : _ptrAudioBuffer(NULL),
+      _mixerManager(),
       _inputDeviceIndex(0),
       _outputDeviceIndex(0),
       _inputDeviceID(kAudioObjectUnknown),

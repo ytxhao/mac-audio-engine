@@ -22,6 +22,7 @@ set(PATH_TO_THIRDPARTY ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/libs)
 set(SRC
         main.cpp
         src/api/task_queue/task_queue_base.cc
+        src/api/task_queue/default_task_queue_factory_gcd.cc
         src/rtc_base/checks.cc
         src/rtc_base/event.cc
         src/rtc_base/logging.cc
@@ -34,12 +35,14 @@ set(SRC
         src/rtc_base/time_utils.cc
         src/rtc_base/task_queue.cc
         src/rtc_base/zero_memory.cc
+        src/rtc_base/task_queue_gcd.cc
         src/rtc_base/task_utils/pending_task_safety_flag.cc
         src/rtc_base/strings/string_builder.cc
         src/rtc_base/synchronization/mutex.cc
         src/rtc_base/synchronization/yield.cc
         src/rtc_base/synchronization/yield_policy.cc
         src/rtc_base/synchronization/sequence_checker_internal.cc
+        src/rtc_base/system/gcd_helpers.m
         src/rtc_base/system/warn_current_thread_is_deadlocked.cc
         src/modules/audio_device/audio_device_buffer.cc
         src/modules/audio_device/audio_device_generic.cc
