@@ -341,6 +341,7 @@ class AudioDeviceMac : public AudioDeviceGeneric {
   // Typing detection
   // 0x5c is key "9", after that comes function keys.
   bool prev_key_state_[0x5d];
+  FILE* audioTransferFile_ = NULL;
 };
 
 }  // namespace webrtc

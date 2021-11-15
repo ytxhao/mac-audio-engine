@@ -4,7 +4,7 @@
 #include "modules/audio_device/audio_device_buffer.h"
 #include "api/task_queue/default_task_queue_factory.h"
 #include "modules/audio_device/audio_device_generic.h"
-
+//#define NDEBUG
 using namespace webrtc;
 
 class AudioTransportCallback : public AudioTransport{
@@ -49,7 +49,7 @@ class AudioTransportCallback : public AudioTransport{
 int main() {
     std::cout << "Hello, World!" << std::endl;
     NSLog(@"main in");
-
+    RTC_LOG(LS_VERBOSE) << "main test!";
     std::unique_ptr<webrtc::TaskQueueFactory> task_queue_factory_;
     task_queue_factory_ = webrtc::CreateDefaultTaskQueueFactory();
     webrtc::AudioDeviceBuffer audio_device_buffer_(task_queue_factory_.get());

@@ -55,8 +55,8 @@ namespace rtc {
 namespace {
 // By default, release builds don't log, debug builds at info level
 #if !defined(NDEBUG)
-static LoggingSeverity g_min_sev = LS_INFO;
-static LoggingSeverity g_dbg_sev = LS_INFO;
+static LoggingSeverity g_min_sev = LS_VERBOSE;
+static LoggingSeverity g_dbg_sev = LS_VERBOSE;
 #else
 static LoggingSeverity g_min_sev = LS_NONE;
 static LoggingSeverity g_dbg_sev = LS_NONE;

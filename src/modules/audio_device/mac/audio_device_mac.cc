@@ -151,7 +151,7 @@ AudioDeviceMac::AudioDeviceMac()
       _renderBufSizeSamples(0),
       prev_key_state_() {
   RTC_DLOG(LS_INFO) << __FUNCTION__ << " created";
-
+  audioTransferFile_ = fopen("/Users/yuhao/tmp/record.pcm", "wb+");
   memset(_renderConvertData, 0, sizeof(_renderConvertData));
   memset(&_outStreamFormat, 0, sizeof(AudioStreamBasicDescription));
   memset(&_outDesiredFormat, 0, sizeof(AudioStreamBasicDescription));
@@ -161,7 +161,10 @@ AudioDeviceMac::AudioDeviceMac()
 
 AudioDeviceMac::~AudioDeviceMac() {
   RTC_DLOG(LS_INFO) << __FUNCTION__ << " destroyed";
-
+    if (audioTransferFile_ != NULL) {
+        fclose(audioTransferFile_);
+        audioTransferFile_ = NULL;
+    }
   if (!_isShutDown) {
     Terminate();
   }
@@ -2338,6 +2341,10 @@ OSStatus AudioDeviceMac::implInDeviceIOProc(const AudioBufferList* inputData,
   if (kernErr != KERN_SUCCESS) {
     RTC_LOG(LS_ERROR) << "semaphore_signal_all() error: " << kernErr;
   }
+
+    if (audioTransferFile_ != NULL) {
+        fwrite(inputData->mBuffers->mData, 1, inputData->mBuffers->mDataByteSize, audioTransferFile_);
+    }
 
   return err;
 }
