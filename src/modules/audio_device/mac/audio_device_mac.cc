@@ -7,7 +7,7 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+#include <thread>
 #include "modules/audio_device/mac/audio_device_mac.h"
 
 #include <ApplicationServices/ApplicationServices.h>
@@ -2351,6 +2351,11 @@ OSStatus AudioDeviceMac::implInDeviceIOProc(const AudioBufferList* inputData,
 
 OSStatus AudioDeviceMac::implInConverterProc(UInt32* numberDataPackets,
                                              AudioBufferList* data) {
+//    RTC_LOG(LS_INFO) << "implInConverterProc tid:"<<std::this_thread::get_id();
+//    std::stringstream ss;
+//    ss << std::this_thread::get_id();
+//    uint64_t id = std::stoull(ss.str());
+//    RTC_LOG(LS_INFO) << "implInConverterProc1 tid:"<<ss.str();
   RTC_DCHECK(data->mNumberBuffers == 1);
   PaRingBufferSize numSamples =
       *numberDataPackets * _inStreamFormat.mChannelsPerFrame;
@@ -2468,7 +2473,10 @@ bool AudioDeviceMac::CaptureWorkerThread() {
   engineBuffer.mBuffers->mDataByteSize =
       _inDesiredFormat.mBytesPerPacket * noRecSamples;
   engineBuffer.mBuffers->mData = recordBuffer;
-
+//    std::stringstream ss;
+//    ss << std::this_thread::get_id();
+////    uint64_t id = std::stoull(ss.str());
+//  RTC_LOG(LS_INFO) << "CaptureWorkerThread tid:"<<ss.str();
   err = AudioConverterFillComplexBuffer(_captureConverter, inConverterProc,
                                         this, &size, &engineBuffer, NULL);
   if (err != noErr) {

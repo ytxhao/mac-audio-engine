@@ -205,12 +205,12 @@ int main() {
     while (!isCancel)
     {
 
-//        std::cout << "1.录制人声" << std::endl;
-//        std::cout << "2.录制人声并播放音乐" << std::endl;
-//        std::cout << "请输入:";
-//        std::getline(std::cin, cmd);
+        std::cout << "1.录制人声" << std::endl;
+        std::cout << "2.录制人声并播放音乐" << std::endl;
+        std::cout << "请输入:";
+        std::getline(std::cin, cmd);
         if (!std::cin.eof()) {
-//            std::cout << "cmd:"<<cmd<<std::endl;
+            std::cout << "cmd:"<<cmd<<std::endl;
         } else {
             isCancel = true;
         }
